@@ -1,4 +1,6 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, I18nManager, Text } from 'react-native';
+import * as Updates from 'expo-updates';
+
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,6 +8,13 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const shouldBeRTL = true;
+
+  if (shouldBeRTL !== I18nManager.isRTL && Platform.OS !== 'web') {
+    I18nManager.allowRTL(shouldBeRTL);
+    I18nManager.forceRTL(shouldBeRTL);
+    Updates.reloadAsync();
+  }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -39,6 +48,8 @@ export default function HomeScreen() {
         <ThemedText>
           Tap the Explore tab to learn more about what's included in this starter app.
         </ThemedText>
+        <ThemedText >{I18nManager.isRTL ? ' RTL' : ' LTR'}</ThemedText>
+
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
